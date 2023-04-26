@@ -33,7 +33,7 @@ pipeline {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
             sh 'ls -lh'
-            sh 'echo "GIT_URL: ${env.GIT_URL}"'
+            sh 'echo ${env.GIT_URL}'
             script {
               currentBuild.result = 'SUCCESS'
             }

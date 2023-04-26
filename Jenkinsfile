@@ -12,6 +12,8 @@ pipeline {
           - name: dind
             image: docker:23.0.4-dind
             tty: true
+            securityContext:
+              privileged: true
             env:
             - name: DOCKER_TLS_CERTDIR
               value: ""

@@ -13,7 +13,6 @@ pipeline {
             image: docker:23.0.4-dind
             tty: true
             securityContext:
-              allowPrivilegeEscalation: false
               runAsUser: 0
               capabilities:
                 add:

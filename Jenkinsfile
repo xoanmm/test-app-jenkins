@@ -32,6 +32,7 @@ pipeline {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
+            sh 'python -m pytest --verbose --junit-xml reports/unit_tests.xml'
             sh 'ls -lh'
           }
         }
@@ -51,11 +52,9 @@ pipeline {
             //                       sourceEncoding: 'ASCII',
             //                       zoomCoverageChart: false])
             script {
-              dir('src') {
-                // if we are in a PR
-                if (env.CHANGE_ID) {
-                    publishCoverageGithub(filepath:'coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
-                }
+              // if we are in a PR
+              if (env.CHANGE_ID) {
+                  publishCoverageGithub(filepath:'src/reports/unit_tests.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
               }
             }
         }

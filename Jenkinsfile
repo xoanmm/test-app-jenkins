@@ -31,7 +31,7 @@ pipeline {
         container('python') {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
-            sh 'python -m coverage xml -o reports/coverage.xml'
+            sh 'pytest --cov --junitxml=./reports/coverage.xml'
             sh 'ls -lh'
           }
         }

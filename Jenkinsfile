@@ -10,7 +10,7 @@ pipeline {
             image: python:3.8
             tty: true
           - name: dind
-            image: 23.0.4-git
+            image: docker:23.0.4-git
             command: [""]
             tty: true
         '''

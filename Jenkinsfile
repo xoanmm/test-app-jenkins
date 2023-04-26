@@ -17,7 +17,7 @@ pipeline {
               runAsUser: 0
             env:
             - name: DOCKER_HOST
-              value: "tcp://localhost:2375"
+              value: "unix:///var/run/docker.sock"
         '''
     }
   }

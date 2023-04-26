@@ -15,6 +15,9 @@ pipeline {
             securityContext:
               allowPrivilegeEscalation: false
               runAsUser: 0
+            env:
+            - name: DOCKER_HOST
+              value: "tcp://localhost:2375"
         '''
     }
   }

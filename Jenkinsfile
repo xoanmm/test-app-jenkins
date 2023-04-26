@@ -9,8 +9,8 @@ pipeline {
           - name: python
             image: python:3.8
             tty: true
-          - name: kaniko
-            image: gcr.io/kaniko-project/executor:v1.9.0-debug
+          - name: dind
+            image: 23.0.4-git
             command: [""]
             tty: true
         '''
@@ -29,8 +29,8 @@ pipeline {
     }
     stage('Build') {
       steps {
-        container('kaniko') {
-          sh '/kaniko/executor --context . --dockerfile "Dockerfile"'
+        container('dind') {
+          sh 'docker build -t xoanmallon/test-app-jenkins:develop .'
         }
       }
     }

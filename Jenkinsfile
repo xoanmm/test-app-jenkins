@@ -32,6 +32,15 @@ pipeline {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov'
+            sh 'python -m pytest --verbose --junit-xml reports/unit_tests.xml'
+          }
+        }
+      }
+      post {
+        container('python') {
+          always {
+              // Archive unit tests for the future
+              junit allowEmptyResults: true, testResults: 'reports/unit_tests.xml'
           }
         }
       }

@@ -54,7 +54,6 @@ pipeline {
       }
     }
     stage('PR Coverage to Github') {
-      when { allOf {not { branch 'master' }; expression { return env.CHANGE_ID != null }} }
       steps {
         dir('src') {
           sh 'ls -lh'

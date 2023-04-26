@@ -50,17 +50,7 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
-        }
-      }
-    }
-    stage('PR Coverage to Github') {
-      steps {
-        dir('src') {
-          sh 'ls -lh'
-          script {
-            currentBuild.result = 'SUCCESS'
-          }
-          step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
         }
       }
     }

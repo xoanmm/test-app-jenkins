@@ -37,11 +37,9 @@ pipeline {
         }
       }
       post {
-        container('python') {
-          always {
-              // Archive unit tests for the future
-              junit allowEmptyResults: true, testResults: 'reports/unit_tests.xml'
-          }
+        always {
+            // Archive unit tests for the future
+            junit allowEmptyResults: true, testResults: 'reports/unit_tests.xml'
         }
       }
     }

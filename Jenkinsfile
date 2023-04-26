@@ -50,6 +50,9 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
+            publishCoverageGithub(filepath:'src/coverage.xml', 
+                                  coverageXmlType: 'cobertura', 
+                                  comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
         }
       }
     }

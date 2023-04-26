@@ -9,6 +9,9 @@ pipeline {
           - name: python
             image: python:3.8
             tty: true
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:v1.9.0-debug
+            tty: true
         '''
     }
   }
@@ -20,6 +23,13 @@ pipeline {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov'
           }
+        }
+      }
+    }
+    stage('Build') {
+      steps {
+        container('kaniko') {
+          sh '/kaniko/executor --context . --dockerfile "Dockerfile"'
         }
       }
     }

@@ -32,6 +32,7 @@ pipeline {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
+            sh 'cp coverage.xml ..'
             sh 'ls -lh'
           }
         }
@@ -50,6 +51,7 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
+            step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
         }
       }
     }

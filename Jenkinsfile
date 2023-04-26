@@ -10,14 +10,8 @@ pipeline {
             image: python:3.8
             tty: true
           - name: dind
-            image: docker:23.0.4-git
+            image: docker:23.0.4-dind
             tty: true
-            securityContext:
-              allowPrivilegeEscalation: false
-              runAsUser: 0
-            env:
-            - name: DOCKER_HOST
-              value: "unix:///var/run/docker.sock"
         '''
     }
   }

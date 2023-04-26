@@ -51,7 +51,7 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
-            step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
         }
       }
     }

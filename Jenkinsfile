@@ -51,10 +51,12 @@ pipeline {
             //                       sourceEncoding: 'ASCII',
             //                       zoomCoverageChart: false])
             script {
+              dir('src') {
                 // if we are in a PR
                 if (env.CHANGE_ID) {
-                    publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
+                    publishCoverageGithub(filepath:'coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
                 }
+              }
             }
         }
       }

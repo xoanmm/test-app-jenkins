@@ -9,24 +9,12 @@ pipeline {
           - name: python
             image: python:3.8
             tty: true
-          - name: dind
-            image: docker:23.0.4-dind
-            tty: true
-            securityContext:
-              privileged: true
+          - name: docker-client
+            image: docker:19.03.1
+            command: ['sleep', '99d']
             env:
-            - name: DOCKER_TLS_CERTDIR
-              value: ""
-            - name: DOCKER_HOST
-              value: tcp://localhost:2375
-            volumeMounts:
-            - name: cache
-              mountPath: /var/lib/docker
-        volumes:
-          - name: cache
-            hostPath:
-              path: /tmp
-              type: Directory
+              - name: DOCKER_HOST
+                value: tcp://localhost:2375
         '''
     }
   }
@@ -43,7 +31,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        container('dind') {
+        container('docker-client') {
           sh 'docker build -t xoanmallon/test-app-jenkins:develop .'
         }
       }

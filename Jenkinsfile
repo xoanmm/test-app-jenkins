@@ -12,12 +12,18 @@ pipeline {
           - name: dind
             image: docker:23.0.4-dind
             tty: true
-            securityContext:
-              runAsUser: 0
-              capabilities:
-                add:
-                  - NET_ADMIN
-                  - SYS_ADMIN
+            env:
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+            - name: DOCKER_HOST
+              value: tcp://localhost:2375
+            volumeMounts:
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+          volumes:
+          - name: dockersock
+            hostPath:
+              path: /var/run/docker.sock
         '''
     }
   }

@@ -31,7 +31,6 @@ pipeline {
         container('python') {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
-            sh 'pytest --cov'
             sh 'python -m pytest --verbose --junit-xml reports/unit_tests.xml'
             sh 'pytest --cov --cov-report=html:coverage_re'
             sh 'ls -lh'
@@ -45,7 +44,7 @@ pipeline {
                 step([$class: 'CoberturaPublisher',
                                 autoUpdateHealth: false,
                                 autoUpdateStability: false,
-                                coberturaReportFile: 'src/html:coverage_re',
+                                coberturaReportFile: 'src/reports/unit_tests.xml',
                                 failNoReports: false,
                                 failUnhealthy: false,
                                 failUnstable: false,

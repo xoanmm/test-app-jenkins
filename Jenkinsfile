@@ -32,7 +32,7 @@ pipeline {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
-            sh 'pytest --cov --cov-report=xml --cov-branch'
+            sh 'coverage xml -i'
             sh 'ls -lh'
           }
         }

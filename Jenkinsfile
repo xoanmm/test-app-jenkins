@@ -12,6 +12,9 @@ pipeline {
           - name: dind
             image: docker:23.0.4-git
             tty: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              runAsUser: 0
         '''
     }
   }

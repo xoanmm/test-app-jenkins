@@ -15,6 +15,10 @@ pipeline {
             securityContext:
               allowPrivilegeEscalation: false
               runAsUser: 0
+              capabilities:
+                add:
+                  - NET_ADMIN
+                  - SYS_ADMIN
         '''
     }
   }

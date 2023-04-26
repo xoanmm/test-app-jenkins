@@ -33,6 +33,7 @@ pipeline {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
             sh 'python -m pytest --verbose --junit-xml reports/unit_tests.xml'
+            sh 'python -m pytest --cov-report term --cov-report xml:coverage.xml --cov'
             sh 'ls -lh'
           }
         }
@@ -54,7 +55,7 @@ pipeline {
             script {
               // if we are in a PR
               if (env.CHANGE_ID) {
-                  publishCoverageGithub(filepath:'src/reports/unit_tests.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
+                  publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
               }
             }
         }

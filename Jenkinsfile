@@ -32,8 +32,7 @@ pipeline {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
-            sh 'python -m pytest --verbose --junit-xml reports/unit_tests.xml'
-            sh 'python -m pytest --cov-report term --cov-report xml:coverage.xml --cov'
+            sh 'pytest --cov --cov-report=xml --cov-branch'
             sh 'ls -lh'
           }
         }

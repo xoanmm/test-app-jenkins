@@ -35,15 +35,6 @@ pipeline {
             sh 'ls -lh'
         }
       }
-      stage('PR Coverage to Github') {
-        when { allOf {not { branch 'master' }; expression { return env.CHANGE_ID != null }} }
-        steps {
-          script {
-              currentBuild.result = 'SUCCESS'
-            }
-          step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
-        }
-      }
       post {
         always {
             // Archive unit tests for the future
@@ -58,12 +49,18 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
-            script {
-              // if we are in a PR
-              if (env.CHANGE_ID) {
-                  publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
-              }
-            }
+        }
+      }
+    }
+    stage('PR Coverage to Github') {
+      when { allOf {not { branch 'master' }; expression { return env.CHANGE_ID != null }} }
+      steps {
+        dir('src') {
+          sh 'ls -lh'
+          script {
+            currentBuild.result = 'SUCCESS'
+          }
+          step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
         }
       }
     }

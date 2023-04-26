@@ -31,7 +31,7 @@ pipeline {
         container('python') {
           dir('src') {
             sh 'pip3 install -r requirements.txt'
-            sh 'python -m coverage xml -o reports/coverage.xml'
+            sh 'pytest --cov --cov-report xml'
             sh 'ls -lh'
           }
         }
@@ -40,11 +40,10 @@ pipeline {
         always {
             // Archive unit tests for the future
             always{
-              junit allowEmptyResults: true, testResults: 'src/reports/coverage.xml'
               step([$class: 'CoberturaPublisher',
                                    autoUpdateHealth: false,
                                    autoUpdateStability: false,
-                                   coberturaReportFile: 'src/reports/coverage.xml',
+                                   coberturaReportFile: 'src/coverage.xml',
                                    failNoReports: false,
                                    failUnhealthy: false,
                                    failUnstable: false,

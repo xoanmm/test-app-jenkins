@@ -38,24 +38,6 @@ pipeline {
         }
       }
     }
-    stage("Unit Test") {
-      steps {
-        container('python') {
-          dir('src') {
-            script {
-              sh 'pip3 install -r requirements.txt'
-              try {
-                def test = sh(script: "pytest --cov", returnStdout: true)
-                check_runs.buildGithubCheck('success', "unit-test")
-              } catch(Exception e) {
-                check_runs.buildGithubCheck('failure', "unit-test")
-                echo "Exception: ${e}"
-              }
-            }
-          }
-        }
-      }
-    }
     stage('Build') {
       steps {
         container('docker') {

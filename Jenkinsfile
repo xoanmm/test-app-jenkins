@@ -11,7 +11,6 @@ pipeline {
             tty: true
           - name: dind
             image: docker:23.0.4-git
-            command: [""]
             tty: true
         '''
     }

@@ -20,12 +20,13 @@ pipeline {
             - name: DOCKER_HOST
               value: tcp://localhost:2375
             volumeMounts:
-            - name: dockersock
-              mountPath: /var/run/docker.sock
-          volumes:
-          - name: dockersock
+            - name: cache
+              mountPath: /var/lib/docker
+        volumes:
+          - name: cache
             hostPath:
-              path: /var/run/docker.sock
+              path: /tmp
+              type: Directory
         '''
     }
   }

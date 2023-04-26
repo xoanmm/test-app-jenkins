@@ -39,19 +39,22 @@ pipeline {
       post {
         always {
             // Archive unit tests for the future
-            step([$class: 'CoberturaPublisher',
-                                  autoUpdateHealth: false,
-                                  autoUpdateStability: false,
-                                  coberturaReportFile: 'src/coverage.xml',
-                                  failNoReports: false,
-                                  failUnhealthy: false,
-                                  failUnstable: false,
-                                  maxNumberOfBuilds: 10,
-                                  onlyStable: false,
-                                  sourceEncoding: 'ASCII',
-                                  zoomCoverageChart: false])
-            if (env.CHANGE_ID) {
-              publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
+            // step([$class: 'CoberturaPublisher',
+            //                       autoUpdateHealth: false,
+            //                       autoUpdateStability: false,
+            //                       coberturaReportFile: 'src/coverage.xml',
+            //                       failNoReports: false,
+            //                       failUnhealthy: false,
+            //                       failUnstable: false,
+            //                       maxNumberOfBuilds: 10,
+            //                       onlyStable: false,
+            //                       sourceEncoding: 'ASCII',
+            //                       zoomCoverageChart: false])
+            script {
+                // if we are in a PR
+                if (env.CHANGE_ID) {
+                    publishCoverageGithub(filepath:'src/coverage.xml', coverageXmlType: 'cobertura', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.65' ], coverageRateType: 'Line')
+                }
             }
         }
       }

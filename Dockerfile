@@ -2,8 +2,8 @@ FROM python:3.8.11-alpine3.14
 
 WORKDIR /service/app
 
-COPY requirements.txt /service/app
-COPY application /service/app/application
+COPY src/requirements.txt /service/app
+COPY src/application /service/app/application
 
 RUN apk --no-cache add curl build-base npm
 RUN pip install --upgrade pip

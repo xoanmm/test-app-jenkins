@@ -33,6 +33,7 @@ pipeline {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
             sh 'ls -lh'
+          }
         }
       }
       post {

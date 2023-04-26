@@ -39,7 +39,19 @@ pipeline {
       post {
         always {
             // Archive unit tests for the future
-            junit allowEmptyResults: true, testResults: 'src/reports/unit_tests.xml'
+            always{
+                step([$class: 'CoberturaPublisher',
+                                autoUpdateHealth: false,
+                                autoUpdateStability: false,
+                                coberturaReportFile: 'src/reports/unit_tests.xml',
+                                failNoReports: false,
+                                failUnhealthy: false,
+                                failUnstable: false,
+                                maxNumberOfBuilds: 10,
+                                onlyStable: false,
+                                sourceEncoding: 'ASCII',
+                                zoomCoverageChart: false])
+            }
         }
       }
     }

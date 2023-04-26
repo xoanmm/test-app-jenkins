@@ -30,8 +30,10 @@ pipeline {
       steps {
         container('python') {
           dir('src') {
-            sh 'pip3 install -r requirements.txt'
-            sh 'pytest --cov'
+            withChecks(name: 'unit-tests') {
+              sh 'pip3 install -r requirements.txt'
+              sh 'pytest --cov'
+            }
           }
         }
       }

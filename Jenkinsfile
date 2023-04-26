@@ -33,17 +33,12 @@ pipeline {
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov --cov-report xml'
             sh 'ls -lh'
-          }
-        }
-      }
-      stage('PR Coverage to Github') {
-        dir('src') {
-          when { allOf {not { branch 'master' }; expression { return env.CHANGE_ID != null }} }
             sh 'echo "GIT_URL: ${env.GIT_URL}"'
             script {
               currentBuild.result = 'SUCCESS'
             }
             step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+          }
         }
       }
       post {

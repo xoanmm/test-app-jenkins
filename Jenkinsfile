@@ -18,6 +18,8 @@ pipeline {
             volumeMounts:
             - name: dockersock
               mountPath: /var/run/docker.sock
+            - name: jenkins-docker-cfg
+              mountPath: /kaniko/.docker
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -29,6 +31,14 @@ pipeline {
           - name: dockersock
             hostPath:
               path: /var/run/docker.sock
+          - name: jenkins-docker-cfg
+            projected:
+              sources:
+              - secret:
+                  name: registry-credentials
+                  items:
+                    - key: .dockerconfigjson
+                      path: config.json
         '''
     }
   }
@@ -61,19 +71,21 @@ pipeline {
   //       }
   //     }
   //   }
-  //   stage('Build') {
-  //     steps {
-  //       container('docker') {
-  //         sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-  //       }
-  //     }
-  //   }
+    stage('Build') {
+      steps {
+        container('docker') {
+          sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
+          sh 'docker push xoanmallon/test-app-jenkins:develop'
+        }
+      }
+    }
     stage('Deploy') {
       steps {
         container('helm') {
           sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
           sh 'helm repo update'
           sh 'helm dep up helm'
+          sh 'helm plugin install https://github.com/databus23/helm-diff --version 3.7.0'
           script {
             input message: "Apply the helm changes?"
           }

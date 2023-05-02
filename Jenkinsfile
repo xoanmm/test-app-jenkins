@@ -18,6 +18,12 @@ pipeline {
             volumeMounts:
             - name: dockersock
               mountPath: /var/run/docker.sock
+          - name: helm
+            image: alpine/helm:3.8.2
+            command:
+            - sleep
+            args:
+            - 99d
           volumes:
           - name: dockersock
             hostPath:
@@ -51,7 +57,6 @@ pipeline {
                                   onlyStable: false,
                                   sourceEncoding: 'ASCII',
                                   zoomCoverageChart: false])
-            step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL.replace(/^PR-/, '')]])
         }
       }
     }
@@ -59,6 +64,16 @@ pipeline {
       steps {
         container('docker') {
           sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
+        }
+      }
+    }
+    stage('Deploy') {
+      steps {
+        container('helm') {
+          sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
+          sh 'helm repo update'
+          sh 'helm dep up helm'
+          sh 'helm -n fast-api upgrade -i my-app helm --create-namespace --wait'
         }
       }
     }

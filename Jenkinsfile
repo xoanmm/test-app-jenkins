@@ -18,8 +18,9 @@ pipeline {
             volumeMounts:
             - name: dockersock
               mountPath: /var/run/docker.sock
-            - name: jenkins-docker-cfg
-              mountPath: ~/.docker
+            - name: foo
+              mountPath: "/.docker/"
+              readOnly: true
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -31,14 +32,9 @@ pipeline {
           - name: dockersock
             hostPath:
               path: /var/run/docker.sock
-          - name: jenkins-docker-cfg
-            projected:
-              sources:
-              - secret:
-                  name: registry-credentials
-                  items:
-                    - key: .dockerconfigjson
-                      path: config.json
+          - name: foo
+            secret:
+              secretName: registry-credentials
         '''
     }
   }
@@ -75,6 +71,7 @@ pipeline {
       steps {
         container('docker') {
           sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
+          sh 'ls -lh .docker'
           sh 'docker push xoanmallon/test-app-jenkins:develop'
         }
       }

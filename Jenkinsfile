@@ -19,7 +19,7 @@ pipeline {
             - name: dockersock
               mountPath: /var/run/docker.sock
             - name: jenkins-docker-cfg
-              mountPath: /kaniko/.docker
+              mountPath: ~/.docker
           - name: helm
             image: alpine/helm:3.8.2
             command:

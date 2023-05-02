@@ -19,7 +19,7 @@ pipeline {
             - name: dockersock
               mountPath: /var/run/docker.sock
             - name: foo
-              mountPath: "/.docker/"
+              mountPath: "$HOME/.docker/"
               readOnly: true
           - name: helm
             image: alpine/helm:3.8.2
@@ -71,7 +71,7 @@ pipeline {
       steps {
         container('docker') {
           sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-          sh 'ls -lh .docker'
+          sh 'ls -lh $HOME/.docker'
           sh 'docker push xoanmallon/test-app-jenkins:develop'
         }
       }

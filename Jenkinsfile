@@ -74,6 +74,9 @@ pipeline {
           sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
           sh 'helm repo update'
           sh 'helm dep up helm'
+          script {
+            input message: "Apply the helm changes?"
+          }
           sh 'helm -n fast-api upgrade -i my-app helm --create-namespace --wait'
         }
       }

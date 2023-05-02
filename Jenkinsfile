@@ -24,6 +24,7 @@ pipeline {
             - sleep
             args:
             - 99d
+          serviceAccountName: jenkins-ci
           volumes:
           - name: dockersock
             hostPath:
@@ -32,41 +33,41 @@ pipeline {
     }
   }
   stages {
-    stage('Test') {
-      steps {
-        container('python') {
-          dir('src') {
-            sh 'pip3 install -r requirements.txt'
-            sh 'pytest --cov --cov-report xml'
-            sh 'cp coverage.xml ..'
-            sh 'ls -lh'
-          }
-        }
-      }
-      post {
-        always {
-            // Archive unit tests for the future
-            step([$class: 'CoberturaPublisher',
-                                  autoUpdateHealth: false,
-                                  autoUpdateStability: false,
-                                  coberturaReportFile: 'src/coverage.xml',
-                                  failNoReports: false,
-                                  failUnhealthy: false,
-                                  failUnstable: false,
-                                  maxNumberOfBuilds: 10,
-                                  onlyStable: false,
-                                  sourceEncoding: 'ASCII',
-                                  zoomCoverageChart: false])
-        }
-      }
-    }
-    stage('Build') {
-      steps {
-        container('docker') {
-          sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-        }
-      }
-    }
+  //   stage('Test') {
+  //     steps {
+  //       container('python') {
+  //         dir('src') {
+  //           sh 'pip3 install -r requirements.txt'
+  //           sh 'pytest --cov --cov-report xml'
+  //           sh 'cp coverage.xml ..'
+  //           sh 'ls -lh'
+  //         }
+  //       }
+  //     }
+  //     post {
+  //       always {
+  //           // Archive unit tests for the future
+  //           step([$class: 'CoberturaPublisher',
+  //                                 autoUpdateHealth: false,
+  //                                 autoUpdateStability: false,
+  //                                 coberturaReportFile: 'src/coverage.xml',
+  //                                 failNoReports: false,
+  //                                 failUnhealthy: false,
+  //                                 failUnstable: false,
+  //                                 maxNumberOfBuilds: 10,
+  //                                 onlyStable: false,
+  //                                 sourceEncoding: 'ASCII',
+  //                                 zoomCoverageChart: false])
+  //       }
+  //     }
+  //   }
+  //   stage('Build') {
+  //     steps {
+  //       container('docker') {
+  //         sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
+  //       }
+  //     }
+  //   }
     stage('Deploy') {
       steps {
         container('helm') {

@@ -19,7 +19,7 @@ pipeline {
             - name: dockersock
               mountPath: /var/run/docker.sock
             - name: foo
-              mountPath: "$HOME/.docker/"
+              mountPath: "$HOME/.docker"
               readOnly: true
           - name: helm
             image: alpine/helm:3.8.2

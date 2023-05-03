@@ -24,7 +24,7 @@ pipeline {
               readOnly: true
             env:
             - name: DOCKER_AUTH_CONFIG
-              value: "/root/.docker/.dockerconfigjson"
+              value: "/root/.docker"
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -38,7 +38,7 @@ pipeline {
               path: /var/run/docker.sock
           - name: foo
             secret:
-              secretName: registry-credentials
+              secretName: reg-creds
         '''
     }
   }

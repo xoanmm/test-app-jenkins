@@ -21,6 +21,9 @@ pipeline {
             - name: foo
               mountPath: "/root/.docker"
               readOnly: true
+            env:
+            - name: DOCKER_AUTH_CONFIG
+              value: "/root/.docker/.dockerconfigjson"
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -70,8 +73,8 @@ pipeline {
     stage('Build') {
       steps {
         container('docker') {
+          sh 'ls -lha $HOME/.docker'
           sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-          sh 'ls -lh $HOME/.docker'
           sh 'docker push xoanmallon/test-app-jenkins:develop'
         }
       }

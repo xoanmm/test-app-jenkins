@@ -20,6 +20,7 @@ pipeline {
               mountPath: /var/run/docker.sock
             - name: foo
               mountPath: "/root/.docker"
+              name: config.json
               readOnly: true
             env:
             - name: DOCKER_AUTH_CONFIG

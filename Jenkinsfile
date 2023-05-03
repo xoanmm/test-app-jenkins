@@ -18,12 +18,17 @@ pipeline {
             volumeMounts:
             - name: dockersock
               mountPath: /var/run/docker.sock
-            - name: foo
-              mountPath: "/root/.docker"
-              readOnly: true
             env:
-            - name: DOCKER_AUTH_CONFIG
-              value: "/root/.docker"
+            - name: DOCKERHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: reg-creds
+                  key: DOCKERHUB_TOKEN
+            - name: DOCKERHUB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: reg-creds
+                  key: DOCKERHUB_USERNAME
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -35,9 +40,6 @@ pipeline {
           - name: dockersock
             hostPath:
               path: /var/run/docker.sock
-          - name: foo
-            secret:
-              secretName: reg-creds
         '''
     }
   }
@@ -70,6 +72,13 @@ pipeline {
   //       }
   //     }
   //   }
+    stage('Docker login') {
+      steps {
+        container('docker') {
+          sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+        }
+      }
+    }
     stage('Build') {
       steps {
         container('docker') {

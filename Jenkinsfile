@@ -82,13 +82,15 @@ pipeline {
     stage('Build') {
       steps {
         container('docker') {
-          sh 'ls -lha $HOME/.docker'
           sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
           sh 'docker push xoanmallon/test-app-jenkins:develop'
         }
       }
     }
     stage('Deploy') {
+      when {
+        branch 'master'
+      }
       steps {
         container('helm') {
           sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'

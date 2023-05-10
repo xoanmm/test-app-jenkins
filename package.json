@@ -10,10 +10,7 @@
     "release": {
       "branches": [
         "master",
-        {
-            "name": "test",
-            "prerelease": true
-        }
+        "test"
       ],
       "plugins": [
         "@semantic-release/commit-analyzer",

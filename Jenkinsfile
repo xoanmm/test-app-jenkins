@@ -128,6 +128,7 @@ pipeline {
           sh 'helm repo update'
           sh 'helm dep up helm'
           sh 'helm plugin install https://github.com/databus23/helm-diff --version 3.7.0'
+          sh "helm diff upgrade -n fast-api my-app helm --set image.tag=${version}"
           script {
             input message: "Apply the helm changes?"
           }

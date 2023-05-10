@@ -9,9 +9,6 @@ pipeline {
           - name: python
             image: python:3.8
             tty: true
-          - name: node
-            image: node:20.1.0
-            tty: true
           - name: docker
             image: docker:19.03.1
             command:
@@ -122,9 +119,9 @@ pipeline {
         container('helm') {
           sh 'ls -lha'
           sh 'VERSION=$(cat semantic_release_version.txt)'
-          echo "VERSION IS ${VERSION}"
+          echo "VERSION IS ${env.VERSION}"
           script {
-            if (VERSION != '') {
+            if (env.VERSION != '') {
               echo "Version is defined and is ${VERSION}"
             } else {
               echo "Version is not defined"

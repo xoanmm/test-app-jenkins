@@ -5,7 +5,6 @@
       "@semantic-release/git": "10.0.1",
       "@semantic-release/release-notes-generator": "11.0.1",
       "@semantic-release/changelog": "6.0.3",
-      "@semantic-release/github": "8.0.7",
       "semantic-release": "^21.0.2"
     },
     "release": {
@@ -28,8 +27,7 @@
             "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt"
           }
         ],
-        "@semantic-release/git",
-        "@semantic-release/github"
+        "@semantic-release/git"
       ]
     },
     "version": "0.0.1",

@@ -103,7 +103,6 @@ pipeline {
           sh '''
           # Run optional required steps before releasing
           npm install
-          ls -lha
           npx semantic-release
           '''
         }

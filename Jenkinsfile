@@ -45,6 +45,7 @@ pipeline {
   }
   environment {
     GITHUB_TOKEN  = credentials('github_app_token')
+    DOCKER_IMAGE_USER = "xoanmallon"
     DOCKER_IMAGE_REPOSITORY = "test-app-python-jenkins-cicd"
   }
   stages {
@@ -105,8 +106,8 @@ pipeline {
       steps {
         container('docker') {
           sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
-          sh "docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t ${REGISTRY_USERNAME}/${env.DOCKER_IMAGE_REPOSITORY}:${version} ."
-          sh "docker push ${REGISTRY_USERNAME}/${env.DOCKER_IMAGE_REPOSITORY}:${version}"
+          sh "docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t ${env.DOCKER_IMAGE_USER}/${env.DOCKER_IMAGE_REPOSITORY}:${version} ."
+          sh "docker push ${env.DOCKER_IMAGE_USER}/${env.DOCKER_IMAGE_REPOSITORY}:${version}"
         }
       }
     }
@@ -122,9 +123,9 @@ pipeline {
           sh 'helm repo update'
           sh 'helm dep up helm'
           sh 'helm plugin install https://github.com/databus23/helm-diff --version 3.7.0'
-          sh "helm diff upgrade -n fast-api my-app helm --set image.repository=${REGISTRY_USERNAME}/${env.DOCKER_IMAGE_REPOSITORY}--set image.tag=${version} --allow-unreleased"
+          sh "helm diff upgrade -n fast-api my-app helm --set image.repository=${env.DOCKER_IMAGE_USER}/${env.DOCKER_IMAGE_REPOSITORY} --set image.tag=${version} --allow-unreleased"
           script {
-            input message: "Apply the helm changes?"
+            input message: "Deploy the new changes?"
           }
           sh 'helm -n fast-api upgrade -i my-app helm --create-namespace --wait'
         }

@@ -47,7 +47,7 @@ pipeline {
     }
   }
   environment {
-    GH_TOKEN  = credentials('github_app_token')
+    GITHUB_TOKEN  = credentials('github_app_token')
   }
   stages {
   //   stage('Test') {

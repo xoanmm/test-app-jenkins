@@ -9,6 +9,9 @@ pipeline {
           - name: python
             image: python:3.8
             tty: true
+          - name: node
+            image: node:14.21.3
+            tty: true
           - name: docker
             image: docker:19.03.1
             command:
@@ -19,16 +22,16 @@ pipeline {
             - name: dockersock
               mountPath: /var/run/docker.sock
             env:
-            - name: DOCKERHUB_TOKEN
+            - name: REGISTRY_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: reg-creds
-                  key: DOCKERHUB_TOKEN
-            - name: DOCKERHUB_USERNAME
+                  key: REGISTRY_TOKEN
+            - name: REGISTRY_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: reg-creds
-                  key: DOCKERHUB_USERNAME
+                  key: REGISTRY_USERNAME
           - name: helm
             image: alpine/helm:3.8.2
             command:
@@ -75,7 +78,7 @@ pipeline {
     stage('Docker login') {
       steps {
         container('docker') {
-          sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+          sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
         }
       }
     }
@@ -87,9 +90,23 @@ pipeline {
         }
       }
     }
+    stage('Release') {
+      when {
+        branch 'test'
+      }
+      steps {
+        container('node') {
+          sh '''
+          # Run optional required steps before releasing
+          npm install
+          npx semantic-release
+          '''
+        }
+      }
+    }
     stage('Deploy') {
       when {
-        branch 'master'
+        branch 'test'
       }
       steps {
         container('helm') {

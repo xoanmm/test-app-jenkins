@@ -1,0 +1,37 @@
+{
+    "name": "liberando-productos-practica-final",
+    "dependencies": {
+        "@semantic-release/exec": "6.0.3",
+        "@semantic-release/git": "10.0.1",
+        "@semantic-release/release-notes-generator": "11.0.1",
+        "@semantic-release/changelog": "6.0.3",
+        "semantic-release": "^21.0.2"
+    },
+    "release": {
+        "branches": [
+            "master",
+            "test"
+        ],
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            [
+                "@semantic-release/changelog",
+                {
+                    "changelogFile": "docs/CHANGELOG.md"
+                }
+            ],
+            [
+                "@semantic-release/exec",
+                {
+                    "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt"
+                }
+            ],
+            "@semantic-release/git"
+        ]
+    },
+    "version": "0.0.1",
+    "devDependencies": {
+        "minimist": "^1.2.5"
+    }
+}

@@ -128,3 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 argocd/values-secret.yaml
+
+# Helm chart related files
+Chart.lock
+helm/charts

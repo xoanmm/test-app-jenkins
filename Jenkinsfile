@@ -53,8 +53,7 @@ pipeline {
       steps {
         container('python') {
           sh 'pip3 install -r src/requirements.txt'
-          sh 'pip3 install pre-commit'
-          sh 'pre-commit run -a'
+          sh 'pylint src --max-line-length=120 --disable="protected-access,no-self-use,too-few-public-methods,no-name-in-module" -rn'
         }
       }
     }

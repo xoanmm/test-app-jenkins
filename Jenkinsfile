@@ -49,6 +49,15 @@ pipeline {
     DOCKER_IMAGE_REPOSITORY = "test-app-python-jenkins-cicd"
   }
   stages {
+    stage('Lint') {
+      steps {
+        container('python') {
+          sh 'pip3 install -r src/requirements.txt'
+          sh 'pip3 install pre-commit'
+          sh 'pre-commit run -a'
+        }
+      }
+    }
     stage('Test') {
       steps {
         container('python') {
@@ -75,14 +84,13 @@ pipeline {
                                   zoomCoverageChart: false])
         }
       }
-    }
+  }
   stage('Release') {
       when {
         branch 'test'
       }
       steps {
         nodejs(nodeJSInstallationName: 'node-20.1.0') {
-          sh 'npm config ls'
           sh 'npm install'
           sh 'npx semantic-release'
           script {

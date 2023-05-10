@@ -10,7 +10,7 @@ pipeline {
             image: python:3.8
             tty: true
           - name: node
-            image: node:14.21.3
+            image: node:20.1.0
             tty: true
           - name: docker
             image: docker:19.03.1

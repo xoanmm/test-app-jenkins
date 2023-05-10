@@ -100,6 +100,7 @@ pipeline {
       steps {
         container('node') {
           echo "GITHUB_TOKEN is ${GITHUB_TOKEN}"
+          sh 'ls -lha'
           sh '''
           # Run optional required steps before releasing
           npm install

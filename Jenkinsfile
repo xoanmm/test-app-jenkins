@@ -80,23 +80,17 @@ pipeline {
         branch 'test'
       }
       steps {
-        // container('node') {
-        //   echo "GITHUB_TOKEN is ${GITHUB_TOKEN}"
-        //   sh 'ls -lha'
-        //   sh '''
-        //   # Run optional required steps before releasing
-        //   npm install
-        //   npx semantic-release
-        //   '''
-        // }
         nodejs(nodeJSInstallationName: 'node-20.1.0') {
           sh 'npm config ls'
           sh 'npm install'
           sh 'npx semantic-release'
           script {
-            // OPTION 1: set variable by reading from file.
-            // FYI, trim removes leading and trailing whitespace from the string
             version = readFile('semantic_release_version.txt').trim()
+          }
+          if (version != '') {
+            echo 'No version generated using semantic-release'
+          } else {
+            sh "echo 'Version generated using semantic-release is ${version}!'"
           }
         }
       }
@@ -126,7 +120,7 @@ pipeline {
           sh 'helm repo update'
           sh 'helm dep up helm'
           sh 'helm plugin install https://github.com/databus23/helm-diff --version 3.7.0'
-          sh "helm diff upgrade -n fast-api my-app helm --set image.tag=${version}"
+          sh "helm diff upgrade -n fast-api my-app helm --set image.tag=${version} --allow-unreleased"
           script {
             input message: "Apply the helm changes?"
           }

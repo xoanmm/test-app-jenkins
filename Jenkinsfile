@@ -99,7 +99,7 @@ pipeline {
       }
       steps {
         container('node') {
-          echo "GH_TOKEN engine is ${GH_TOKEN}"
+          echo "GITHUB_TOKEN is ${GITHUB_TOKEN}"
           sh '''
           # Run optional required steps before releasing
           npm install

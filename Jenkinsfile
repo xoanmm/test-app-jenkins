@@ -75,22 +75,7 @@ pipeline {
   //       }
   //     }
   //   }
-    // stage('Docker login') {
-    //   steps {
-    //     container('docker') {
-    //       sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
-    //     }
-    //   }
-    // }
-    // stage('Build') {
-    //   steps {
-    //     container('docker') {
-    //       sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-    //       sh 'docker push xoanmallon/test-app-jenkins:develop'
-    //     }
-    //   }
-    // }
-    stage('Release') {
+  stage('Release') {
       when {
         branch 'test'
       }
@@ -113,6 +98,19 @@ pipeline {
             // FYI, trim removes leading and trailing whitespace from the string
             version = readFile('semantic_release_version.txt').trim()
           }
+        }
+      }
+    }
+    stage('Docker build & push') {
+      when {
+        branch 'test'
+        expression { version != '' }
+      }
+      steps {
+        container('docker') {
+          sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
+          sh "docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:${version} ."
+          sh "docker push xoanmallon/test-app-jenkins:${version}"
         }
       }
     }

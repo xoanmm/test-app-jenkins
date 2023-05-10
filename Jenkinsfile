@@ -98,13 +98,11 @@ pipeline {
         branch 'test'
       }
       steps {
-        container('node') {
-          sh '''
-          # Run optional required steps before releasing
-          npm install
-          npx semantic-release
-          '''
-        }
+        sh '''
+        # Run optional required steps before releasing
+        npm install
+        npx semantic-release
+        '''
       }
     }
     stage('Deploy') {

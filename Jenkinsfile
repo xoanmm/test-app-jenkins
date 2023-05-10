@@ -107,13 +107,10 @@ pipeline {
         //   npx semantic-release
         //   '''
         // }
-        step {
-          node {
-            env.NODEJS_HOME = "${tool 'Node 6.x'}"
-            // on linux / mac
-            env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
-            sh 'npm --version'
-          } 
+        nodejs(nodeJSInstallationName: 'node-20.1.0') {
+          sh 'npm config ls'
+          sh 'npm install'
+          sh 'npx semantic-release'
         }
       }
     }

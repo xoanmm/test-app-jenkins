@@ -89,7 +89,7 @@ pipeline {
             version = readFile('semantic_release_version.txt').trim()
           }
           script {
-            if ("${version}" != "") {
+            if (version == "") {
               echo 'No version generated using semantic-release'
             } else {
               sh "echo 'Version generated using semantic-release is ${version}!'"

@@ -108,24 +108,22 @@ pipeline {
           sh 'npm config ls'
           sh 'npm install'
           sh 'npx semantic-release'
+          script {
+            // OPTION 1: set variable by reading from file.
+            // FYI, trim removes leading and trailing whitespace from the string
+            version = readFile('semantic_release_version.txt').trim()
+          }
         }
       }
     }
     stage('Deploy') {
       when {
         branch 'test'
+        expression { version != '' }
       }
       steps {
         container('helm') {
-          sh 'ls -lha'
-          sh 'VERSION=$(cat semantic_release_version.txt)'
-          sh '''
-            if [ -z ${VERSION+x} ]; then 
-              echo "VERSION is VERSION"; 
-            else 
-              echo "VERSION is set to '$VERSION'"; 
-            fi
-          '''
+          echo "Version to deploy is ${version}"
           sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
           sh 'helm repo update'
           sh 'helm dep up helm'

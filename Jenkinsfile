@@ -98,14 +98,20 @@ pipeline {
         branch 'test'
       }
       steps {
-        container('node') {
-          echo "GITHUB_TOKEN is ${GITHUB_TOKEN}"
-          sh 'ls -lha'
-          sh '''
-          # Run optional required steps before releasing
-          npm install
-          npx semantic-release
-          '''
+        // container('node') {
+        //   echo "GITHUB_TOKEN is ${GITHUB_TOKEN}"
+        //   sh 'ls -lha'
+        //   sh '''
+        //   # Run optional required steps before releasing
+        //   npm install
+        //   npx semantic-release
+        //   '''
+        // }
+        node {
+          env.NODEJS_HOME = "${tool 'Node 6.x'}"
+          // on linux / mac
+          env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
+          sh 'npm --version'
         }
       }
     }

@@ -78,21 +78,21 @@ pipeline {
   //       }
   //     }
   //   }
-    stage('Docker login') {
-      steps {
-        container('docker') {
-          sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
-        }
-      }
-    }
-    stage('Build') {
-      steps {
-        container('docker') {
-          sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
-          sh 'docker push xoanmallon/test-app-jenkins:develop'
-        }
-      }
-    }
+    // stage('Docker login') {
+    //   steps {
+    //     container('docker') {
+    //       sh 'echo $REGISTRY_TOKEN | docker login -u $REGISTRY_USERNAME --password-stdin'
+    //     }
+    //   }
+    // }
+    // stage('Build') {
+    //   steps {
+    //     container('docker') {
+    //       sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t xoanmallon/test-app-jenkins:develop .'
+    //       sh 'docker push xoanmallon/test-app-jenkins:develop'
+    //     }
+    //   }
+    // }
     stage('Release') {
       when {
         branch 'test'

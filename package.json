@@ -1,5 +1,9 @@
 {
     "name": "liberando-productos-practica-final",
+    "repository": {
+      "type": "https",
+      "url": "https://github.com/xoanmm/test-app-jenkins.git"
+    },
     "repositoryUrl": "https://github.com/xoanmm/test-app-jenkins.git",
     "dependencies": {
       "@semantic-release/exec": "6.0.2",

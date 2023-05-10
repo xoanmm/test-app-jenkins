@@ -119,14 +119,13 @@ pipeline {
         container('helm') {
           sh 'ls -lha'
           sh 'VERSION=$(cat semantic_release_version.txt)'
-          echo "VERSION IS ${env.VERSION}"
-          script {
-            if (env.VERSION != '') {
-              echo "Version is defined and is ${VERSION}"
-            } else {
-              echo "Version is not defined"
-            }
-          }
+          sh '''
+            if [ -z ${VERSION+x} ]; then 
+              echo "VERSION is VERSION"; 
+            else 
+              echo "VERSION is set to '$VERSION'"; 
+            fi
+          '''
           sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
           sh 'helm repo update'
           sh 'helm dep up helm'

@@ -1,30 +1,5 @@
 pipeline {
-  agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        spec:
-          containers:
-          - name: python
-            image: python:3.8
-            tty: true
-          - name: docker
-            image: docker:19.03.1
-            command:
-            - sleep
-            args:
-            - 99d
-            volumeMounts:
-            - name: dockersock
-              mountPath: /var/run/docker.sock
-          volumes:
-          - name: dockersock
-            hostPath:
-              path: /var/run/docker.sock
-        '''
-    }
-  }
+  agent any
   stages {
     stage('Test') {
       steps {

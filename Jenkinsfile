@@ -5,7 +5,7 @@ pipeline {
       steps {
         container('tools') {
           dir('src') {
-            sh 'pip3 install --upgrade pip3'
+            sh 'pip install --upgrade pip'
             sh 'pip3 install -r requirements.txt'
             sh 'pytest --cov'
           }

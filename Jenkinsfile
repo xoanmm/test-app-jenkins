@@ -7,7 +7,8 @@ pipeline {
           dir('src') {
             sh 'pip install --upgrade pip'
             sh 'pip3 install -r requirements.txt'
-            sh 'pytest --cov'
+            // sh 'pytest --cov'
+            sh 'python -m pytest --cov'
           }
         }
       }

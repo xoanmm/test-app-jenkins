@@ -12,6 +12,22 @@ pipeline {
           }
         }
       }
+      post {
+        always {
+            // Archive unit tests for the future
+            step([$class: 'CoberturaPublisher',
+                                  autoUpdateHealth: false,
+                                  autoUpdateStability: false,
+                                  coberturaReportFile: 'src/coverage.xml',
+                                  failNoReports: false,
+                                  failUnhealthy: false,
+                                  failUnstable: false,
+                                  maxNumberOfBuilds: 10,
+                                  onlyStable: false,
+                                  sourceEncoding: 'ASCII',
+                                  zoomCoverageChart: false])
+        }
+      }
     }
     // stage('Build') {
     //   steps {

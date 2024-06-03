@@ -7,7 +7,7 @@ pipeline {
           dir('src') {
             sh 'pip install --upgrade pip'
             sh 'pip3 install -r requirements.txt'
-            sh 'python -m pytest --cov'
+            sh 'python -m pytest --cov --cov-report xml'
             sh 'cp coverage.xml ..'
           }
         }
